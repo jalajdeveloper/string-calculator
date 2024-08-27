@@ -13,8 +13,8 @@ export function add(numbers: string): number {
         input = input.substring(match[0].length);
     }
 
-    // Handle default delimiter (comma) and new line
-    const delimiterPattern = `[${delimiter}\n]`;
+    // Prepare a regular expression for splitting the input
+    const delimiterPattern = `[${delimiter}\n,]`;
     const numArray = input
         .split(new RegExp(delimiterPattern))
         .map(num => {
