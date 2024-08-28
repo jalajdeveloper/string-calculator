@@ -22,8 +22,11 @@ const StringCalculator: React.FC = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Enter numbers"
+                style={{ padding: '8px', width: '200px', marginBottom: '10px' }}
             />
-            <button onClick={handleCalculate}>Calculate</button>
+            <button onClick={handleCalculate} style={{ padding: '8px 16px', marginLeft: '10px' }}>
+                Calculate
+            </button>
             {result !== null && <h2>Result: {result}</h2>}
         </div>
     );
