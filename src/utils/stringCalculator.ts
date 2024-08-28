@@ -1,25 +1,38 @@
 export function add(numbers: string): number {
+
     if (!numbers) return 0;
 
-    // Handle custom delimiters
-    const delimiterRegex = /^\/\/(.+)\n/;
-    let delimiter = ',';
+    let delimiters = [',', '\n'];  // Default delimiters
     let input = numbers;
 
-    // Check if custom delimiter is used
-    const match = input.match(delimiterRegex);
-    if (match) {
-        delimiter = match[1];
-        input = input.substring(match[0].length);
-    }
+    // Check for custom delimiter syntax
+    const customDelimiterMatch = numbers.match(/^\/\/(\[.*\]|.)\n/);
+    if (customDelimiterMatch) {
+        let customDelimiter = customDelimiterMatch[1];
+        console.log("Custom delimiter detected:", customDelimiter);
 
-    // Prepare a regular expression for splitting the input
-    const delimiterPattern = `[${delimiter}\n,]`;
+        // Handle multiple custom delimiters
+        if (customDelimiter.startsWith('[') && customDelimiter.endsWith(']')) {
+            delimiters = customDelimiter.slice(1, -1).split('][');
+        } else {
+            delimiters = [customDelimiter];
+        }
+
+        // Remove the delimiter definition from the input string
+        input = numbers.slice(customDelimiterMatch[0].length);
+    }
+    // Create regex pattern for delimiters
+    const delimiterRegex = new RegExp(
+        delimiters.map(d => d.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')
+    );
+
+    // Split the input string using the delimiter regex
     const numArray = input
-        .split(new RegExp(delimiterPattern))
+        .split(delimiterRegex)
+        .filter(num => num !== '')  // Filter out empty strings
         .map(num => {
-            const parsed = Number(num);
-            return isNaN(parsed) ? 0 : parsed;
+           
+            return Number(num);
         });
 
     // Check for negative numbers
@@ -28,5 +41,7 @@ export function add(numbers: string): number {
         throw new Error(`negative numbers not allowed ${negatives.join(',')}`);
     }
 
-    return numArray.reduce((sum, num) => sum + num, 0);
+    // Calculate the sum of numbers
+    const sum = numArray.reduce((sum, num) => sum + num, 0);
+    return sum;
 }
