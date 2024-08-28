@@ -9,8 +9,13 @@ const StringCalculator: React.FC = () => {
         try {
             const calculationResult = add(input);
             setResult(calculationResult);
-        } catch (error: any) {
-            setResult(error.message);
+        } catch (error) {
+            // Type assertion for error as Error
+            if (error instanceof Error) {
+                setResult(error.message);
+            } else {
+                setResult('An unknown error occurred');
+            }
         }
     };
 

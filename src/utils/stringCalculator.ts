@@ -7,9 +7,7 @@ export function add(numbers: string): number {
     // Check for custom delimiter syntax
     const customDelimiterMatch = numbers.match(/^\/\/(\[.*\]|.)\n/);
     if (customDelimiterMatch) {
-        let customDelimiter = customDelimiterMatch[1];
-        console.log("Custom delimiter detected:", customDelimiter);
-
+        const customDelimiter = customDelimiterMatch[1]; // Change 'let' to 'const'
         // Handle multiple custom delimiters
         if (customDelimiter.startsWith('[') && customDelimiter.endsWith(']')) {
             delimiters = delimiters.concat(customDelimiter.slice(1, -1).split(']['));
